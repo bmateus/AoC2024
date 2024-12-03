@@ -18,14 +18,14 @@ data.split('\n').forEach(line => {
     }
 });
 
-list1.sort((a, b) => a - b);
-list2.sort((a, b) => a - b);
+list1.sort();
+list2.sort();
 
 let totalDistance = 0;
 for (let i = 0; i < list1.length; i++) {
     
     totalDistance += Math.abs(list1[i] - list2[i]);
-    console.log(list1[i], list2[i], totalDistance);
+    //console.log(list1[i], list2[i], totalDistance);
 }
 console.log('Total Distance:', totalDistance);
 
