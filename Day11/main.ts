@@ -2,7 +2,7 @@ const data = Deno.readTextFileSync("./input.txt");
 
 //------ DAY 11 ------//
 
-function blink(stones) {
+function blink(stones: string[]) : string[] {
 
     const newStones = [];
 
@@ -74,71 +74,42 @@ console.log("1) num stones after 25 blinks:", result.length);
 
 //wow this totally doesnt work haha
 
-function blink2(stoneMap) {
+function blink2(stoneMap : {[key: string]: number}) : {[key: string]: number} {
 
-    const newStoneMap = {};
+    const newStoneMap : {[key: string]: number} = {};
 
-    //stone map contains a list of { id, num }
-    //iterate the keys of stoneMap:
-    for (let key in stoneMap) {
+    for (const key in stoneMap) {
         if (key == '0') {
-            if (newStoneMap['1'] == undefined) {
-                newStoneMap['1'] = stoneMap['0'];
-            }
-            else {
-                newStoneMap['1'] += stoneMap['0'];
-            }            
+            newStoneMap['1'] = (newStoneMap['1'] ?? 0) + stoneMap['0'];                        
         }
         else if (key.length % 2 == 0) {
-            const left = parseInt(key.slice(0,key.length/2));
-            const right = parseInt(key.slice(key.length/2,key.length));
-            if (newStoneMap[left.toString()] == undefined) {
-                newStoneMap[left.toString()] = stoneMap[key];    
-            }
-            else {
-                newStoneMap[left.toString()] += stoneMap[key];
-            }
-            
-            if (newStoneMap[right.toString()] == undefined) {
-                newStoneMap[right.toString()] = stoneMap[key];    
-            }
-            else {
-                newStoneMap[right.toString()] += stoneMap[key];
-            }            
+            const left = parseInt(key.slice(0,key.length/2)).toString();
+            const right = parseInt(key.slice(key.length/2,key.length)).toString();            
+            newStoneMap[left] = (newStoneMap[left] ?? 0) + stoneMap[key];            
+            newStoneMap[right] = (newStoneMap[right] ?? 0) + stoneMap[key]; 
         }
         else {
             const k = (parseInt(key) * 2024).toString();
-            if (newStoneMap[k] == undefined) {
-                newStoneMap[k] = stoneMap[key];
-            }
-            else {
-                newStoneMap[k] += stoneMap[key];
-            }
+            newStoneMap[k] = (newStoneMap[k] ?? 0) + stoneMap[key];
         }
     }
 
     return newStoneMap;
 }
 
-let result2 = data.trim().split(' ');
-let stoneMap = {};
+const result2 = data.trim().split(' ');
+let stoneMap : {[key: string]: number} = {};
 result2.forEach(stone => {
-    if (stoneMap[stone] == undefined) {
-        stoneMap[stone] = 1;
-    }  
-    else {
-        stoneMap[stone] += 1;
-    }    
+    stoneMap[stone] = (stoneMap[stone] ?? 0) + 1;        
 })
 
 for (let blinks = 0; blinks < 75; blinks++) {
-
     stoneMap = blink2(stoneMap);
 }
 
 //count all 
 let totalStones = 0;
-for (let key in stoneMap) {
+for (const key in stoneMap) {
     totalStones += stoneMap[key];
 }
 
